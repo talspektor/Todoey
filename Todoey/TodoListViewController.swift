@@ -35,6 +35,10 @@ class TodoListViewController: UITableViewController {
         newItem3.title = "FindMike"
         itemArrray.append(newItem3)
         
+        if let items = defaults.array(forKey: "ToDoItemCell") as? [Item]{
+            itemArrray = items
+        }
+        
         
     }
     
@@ -53,7 +57,14 @@ class TodoListViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
         
-        cell.textLabel?.text = itemArrray[indexPath.row].title
+        let item = itemArrray[indexPath.row]
+        
+        cell.textLabel?.text = item.title
+        
+        //Ternary operator ==>
+        // value = condition ? valueIfTrue : valueIfFalse
+        
+        cell.accessoryType = item.done ? .checkmark : .none
         
         return cell
     }
@@ -64,15 +75,10 @@ class TodoListViewController: UITableViewController {
         
         //(itemArrray[indexPath.row])
         
-        itemArrray[indexPath.row].done
+        itemArrray[indexPath.row].done = !itemArrray[indexPath.row].done
         
-        if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark{
-            
-            tableView.cellForRow(at: indexPath)?.accessoryType = .none
-        }
-        else{
-            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-        }
+        
+        tableView.reloadData()
         
         tableView.deselectRow(at: indexPath, animated: true)
         
