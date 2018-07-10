@@ -10,13 +10,35 @@ import UIKit
 
 class TodoListViewController: UITableViewController {
     
-    var itemArrray = ["Find Milk", "Buy Eggos", "Destory Demogorgon"]
+    var itemArrray = [Item]()
+    
+    let defaults = UserDefaults.standard
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if let items = defaults.array(forKey: "TodoListArray") as? [Item] {
+            
+            itemArrray = items
+        }
+        
+        let newItem = Item()
+        newItem.title = "FindMike"
+        itemArrray.append(newItem)
+        
+        let newItem2 = Item()
+        newItem2.title = "FindMike"
+        itemArrray.append(newItem2)
+        
+        let newItem3 = Item()
+        newItem3.title = "FindMike"
+        itemArrray.append(newItem3)
+        
+        
     }
+    
+    
     
     //MARK - TableView Datasource Methods
     
@@ -31,7 +53,7 @@ class TodoListViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
         
-        cell.textLabel?.text = itemArrray[indexPath.row]
+        cell.textLabel?.text = itemArrray[indexPath.row].title
         
         return cell
     }
@@ -41,6 +63,8 @@ class TodoListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         //(itemArrray[indexPath.row])
+        
+        itemArrray[indexPath.row].done
         
         if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark{
             
@@ -67,7 +91,12 @@ class TodoListViewController: UITableViewController {
             print("Success")
             //what will happen once the user clicks the Add Item button on our UIAlert
            
-            self.itemArrray.append(textField.text!)
+            let newItem = Item()
+            newItem.title = textField.text!
+            
+            self.itemArrray.append(newItem)
+            
+            self.defaults.set(self.itemArrray, forKey: "TodoListArray")
             
             self.tableView.reloadData()
         }
