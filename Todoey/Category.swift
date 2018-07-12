@@ -13,4 +13,5 @@ class Category: Object {
     
     @objc dynamic var name : String = ""
     let items = List<Item>()//the forward relatianship
+    @objc dynamic var color : String = ""
 }
